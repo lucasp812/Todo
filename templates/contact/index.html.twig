@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ContactController!{% endblock %}
+
+{% block body %}
+
+
+  {{form_start(form)}}
+  {{form_row(form.name)}}
+  {{form_row(form.email)}}
+  {{form_row(form.message)}}
+  <input type="submit" name="submit" value="envoyer">
+  {{form_end(form)}}
+          {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+
+{% endblock %}
