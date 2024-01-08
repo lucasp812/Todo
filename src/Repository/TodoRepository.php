@@ -38,6 +38,13 @@ class TodoRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+    public function findAllOrdered($order, $orderby): array {
+        $qb = $this->createQueryBuilder('t')  
+            ->orderBy('t.name', $orderby, $order)
+            ->getQuery()
+            ->getResult();
+        return $qb;
+    }
 
 //    /**
 //     * @return Todo[] Returns an array of Todo objects

@@ -8,8 +8,9 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
+                <th><a href="{{ path('app_todo_index' ) }}?orderby={{orderby}}"> Id </a></th></th>
+                <th>
+                 <a href="{{ path('app_todo_index' ) }}?order={{order}}"> Name </a></th>
                 <th>description</th>
                 <th>actions</th>
             </tr>

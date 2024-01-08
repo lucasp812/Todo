@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Controller;
-
 use App\Entity\Todo;
 use App\Form\TodoType;
 use App\Repository\TodoRepository;
@@ -9,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 
 /**
  * @Route("/todo")
@@ -18,10 +18,27 @@ class TodoController extends AbstractController
     /**
      * @Route("/", name="app_todo_index", methods={"GET"})
      */
-    public function index(TodoRepository $todoRepository): Response
+    public function index(TodoRepository $todoRepository, Request $request): Response
     {
+        $orderby=$request->query->get('orderby');
+        $order=$request->query->get('order');
+        if($order == 'ASC'){
+            $n = 'DESC';
+        }else{
+            $n ='ASC';
+        }
+
+        if($orderby == 'ASC'){
+            $idOrder = 'DESC';
+        }else{
+            $idOrder ='ASC';
+        }
+    
+    
         return $this->render('todo/index.html.twig', [
-            'todos' => $todoRepository->findAll(),
+            'todos' => $todoRepository->findAllOrdered($order,$orderby),
+            "order"=> $n,
+            "orderby"=>$idOrder
         ]);
     }
 
@@ -50,7 +67,10 @@ class TodoController extends AbstractController
      * @Route("/{id}", name="app_todo_show", methods={"GET"})
      */
     public function show(Todo $todo): Response
-    {
+    { 
+
+
+        dump($todo);    
         return $this->render('todo/show.html.twig', [
             'todo' => $todo,
         ]);
