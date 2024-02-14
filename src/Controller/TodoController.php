@@ -8,6 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Form\TodoFilterType;
+
 
 
 /**
@@ -16,12 +18,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class TodoController extends AbstractController
 {
     /**
-     * @Route("/", name="app_todo_index", methods={"GET"})
+     * @Route("/", name="app_todo_index", methods={"GET", "POST"})
      */
     public function index(TodoRepository $todoRepository, Request $request): Response
     {
+        $form = $this->createForm(TodoFilterType::class);
+        $form->handleRequest($request);
         $orderby=$request->query->get('orderby');
         $order=$request->query->get('order');
+
         if($order == 'ASC'){
             $n = 'DESC';
         }else{
@@ -38,7 +43,8 @@ class TodoController extends AbstractController
         return $this->render('todo/index.html.twig', [
             'todos' => $todoRepository->findAllOrdered($order,$orderby),
             "order"=> $n,
-            "orderby"=>$idOrder
+            "orderby"=>$idOrder,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -68,8 +74,6 @@ class TodoController extends AbstractController
      */
     public function show(Todo $todo): Response
     { 
-
-
         dump($todo);    
         return $this->render('todo/show.html.twig', [
             'todo' => $todo,
