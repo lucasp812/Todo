@@ -4,11 +4,12 @@
 
 {% block body %}
     <h1>Todo index</h1>
-
+<tr class="checkbox>"
 {{form_start(form)}}
-  {{form_row(form.todo)}}
+ 
   <input type="submit" name="submit" value="envoyer">
   {{form_end(form)}}
+  </tr>
     <table class="table">
       <thead>
             <tr>
@@ -16,18 +17,26 @@
                 <th>
                  <a href="{{ path('app_todo_index' ) }}?order={{order}}"> Name </a></th>
                 <th>description</th>
+                <th>done</th>
+                <th> priority</th>
+
                 <th>actions</th>
+
             </tr>
         </thead>
         <tbody>
         {% for todo in todos %}
-            <tr>
+            <tr >
                 <td>{{ todo.id }}</td>
                 <td>{{ todo.name }}</td>
                 <td>{{ todo.description }}</td>
+                <td class="isDone" id = {{ todo.id }}> {{ todo.done == 1 ? 'oui' : 'non'  }}</td>
+                <td>
+                
                 {% if todo.priority is not null %}
                 {{ todo.priority.level }}
                 {% endif %}
+                </td>
                 <td>
                     <a href="{{ path('app_todo_show', {'id': todo.id}) }}">show</a>
                     <a href="{{ path('app_todo_edit', {'id': todo.id}) }}">edit</a>

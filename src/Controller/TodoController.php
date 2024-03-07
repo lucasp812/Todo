@@ -8,6 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use App\Form\TodoFilterType;
 
 
@@ -99,6 +101,28 @@ class TodoController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    /**
+     * @Route("/{id}/change-update", name="app_todo_change-update", methods={"GET", "POST"})
+     */
+    public function ChangeStatus(ManagerRegistry $doctrine, $id, EntityManagerInterface $entityManager): Response
+    {
+        $status = $doctrine->getRepository(todo::class)->findOneBy(["id" => $id]);
+        if($status->isDone()== 1){
+            $status->setDone(0) ;
+
+        }
+        else {$status->setDone(1) ;
+       
+    }
+    $entityManager->persist($status);
+
+    $entityManager->flush();
+
+    return $this->json(['message' => "oui"]);
+
+}
+
 
     /**
      * @Route("/{id}", name="app_todo_delete", methods={"POST"})
