@@ -45,6 +45,26 @@ class TodoRepository extends ServiceEntityRepository
             ->getResult();
         return $qb;
     }
+   
+        public function findBySearchTerms($searchTerms) {
+            if (!empty($searchTerms)) {
+                $query = "SELECT * FROM table WHERE ";
+                $conditions = array();
+                foreach ($searchTerms as $term) {
+                    $conditions[] = "column LIKE '%" . $term . "%'";
+                }
+                $query .= implode(" AND ", $conditions);
+        
+                return $query;
+            } else {
+                return "Aucun terme de recherche spécifié.";
+            }
+        }
+        
+
+    
+
+    
 
 //    /**
 //     * @return Todo[] Returns an array of Todo objects

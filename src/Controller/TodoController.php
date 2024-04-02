@@ -82,6 +82,19 @@ class TodoController extends AbstractController
         ]);
     }
 
+    
+    /**
+     * @Route("/search", name="app_todo_search", methods={"POST"})
+     */
+    public function search(Request $request, TodoRepository $todoRepository ): Response
+    {   
+        $terms = $request->request->get('terms'); 
+        $todos = $this->getDoctrine()->getRepository(Todo::class)->findBySearchTerms($terms);
+        return $this->render('todo/index.html.twig', [
+            'todos' => $todos,
+        ]);
+    }
+
     /**
      * @Route("/{id}/edit", name="app_todo_edit", methods={"GET", "POST"})
      */
@@ -125,7 +138,7 @@ class TodoController extends AbstractController
 
 
     /**
-     * @Route("/{id}", name="app_todo_delete", methods={"POST"})
+     * @Route("/{id}", name="app_todo_delete", methods={"POST"}, requirements={"id"="\d+"})
      */
     public function delete(Request $request, Todo $todo, TodoRepository $todoRepository): Response
     {
