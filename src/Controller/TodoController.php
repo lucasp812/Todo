@@ -136,7 +136,6 @@ class TodoController extends AbstractController
 
 }
 
-
     /**
      * @Route("/{id}", name="app_todo_delete", methods={"POST"}, requirements={"id"="\d+"})
      */
